@@ -1,13 +1,18 @@
 const fs = require('fs');
 
-// Module variables
+/* Module variables */
 var data = {};
 var datafile = "";
 
-// Crud API object
+/* CRUD API object */
 var crud = {};
 
-// Create and Save a new Note
+/** @function create
+  * This API function creates a new JSON course
+  * object from the request body.
+  * @param {http.clientRequest} req - the incoming request
+  * @param {http.serverResponse} res - the response to serve
+  */
 crud.create = function(req, res) {
   var jsonString = "";
   
@@ -43,6 +48,13 @@ crud.create = function(req, res) {
   });
 };
 
+/** @function readAll
+  * This API function returns a JSON array
+  * containing all course entries.
+  * TODO finish error handling
+  * @param {http.clientRequest} req - the incoming request
+  * @param {http.serverResponse} res - the response to serve
+  */
 crud.readAll = function(req, res) {
   var courseArr = [];
   var courseObject = data["courses"];
@@ -56,6 +68,13 @@ crud.readAll = function(req, res) {
   res.end(courseArr);
 };
 
+/** @function readOne
+  * This API function returns a JSON array
+  * containing a specified course entry.
+  * TODO finish error handling
+  * @param {http.clientRequest} req - the incoming request
+  * @param {http.serverResponse} res - the response to serve
+  */
 crud.readOne = function(req, res) {
   var id = req.params.id;
   var courseObject = data["courses"];
@@ -67,6 +86,13 @@ crud.readOne = function(req, res) {
 
 };
 
+/** @function update
+  * This API function updates the course JSON object
+  * containing the specified course entry.
+  * TODO finish error handling
+  * @param {http.clientRequest} req - the incoming request
+  * @param {http.serverResponse} res - the response to serve
+  */
 crud.update = function(req, res) {
   var id = req.params.id;
   data["courses"][id] = req.body;
@@ -76,6 +102,13 @@ crud.update = function(req, res) {
   res.end();
 };
 
+/** @function destroy
+  * This API function returns a JSON array
+  * containing a specified course entry.
+  * TODO finish error handling
+  * @param {http.clientRequest} req - the incoming request
+  * @param {http.serverResponse} res - the response to serve
+  */
 crud.destroy = function(req, res) {
   var id = req.params.id;
 

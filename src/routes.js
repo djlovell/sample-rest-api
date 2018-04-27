@@ -22,5 +22,8 @@ routes.delete('/courses/:id', function(req, res) {
     apiCalls.crud.destroy(req,res);
 });
 
+/** @module routes
+  * Express routes for calling the CRUD API
+  */
 module.exports = routes;
 
