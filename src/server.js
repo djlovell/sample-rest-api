@@ -1,10 +1,20 @@
 const http = require('http');
 const api = require('./api');
+const express = require('express');
+const bodyParser = require('body-parser');
+const app = express();
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+var routes = require('./routes');
+app.use('/', routes);
 
 // Module variables
 var serverInstance;
 var apiInstance;
-var server = http.createServer(api.handleRequest);
+
+var server = http.createServer(app);
 
 /** @function start
   * Starts the server

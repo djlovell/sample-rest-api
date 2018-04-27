@@ -4,25 +4,13 @@ const fs = require('fs');
 var data = {};
 var datafile = "";
 
-/** @function handleRequest
-  * This function maps incoming requests to
-  * API calls.
-  * TODO set up mapping.
-  * @param {http.clientRequest} req - the incoming request
-  * @param {http.serverResponse} res - the response to serve
-  */
-function handleRequest(req, res) {
-  if(req.method === 'POST' && req.url === '/courses') {
-    return createCourse(req, res);
-  } else {
-    res.statusCode = 400;
-    res.end("Not implemented");
-  }
-}
+// Crud API object
+var crud = {};
 
-function createCourse(req, res) {
+// Create and Save a new Note
+crud.create = function(req, res) {
   var jsonString = "";
-
+  
   req.on('data', function(chunk) {
     jsonString += chunk;
   });
@@ -53,8 +41,50 @@ function createCourse(req, res) {
       res.end("Server Error: " + err);
     }
   });
+};
 
-}
+crud.readAll = function(req, res) {
+  var courseArr = [];
+  var courseObject = data["courses"];
+
+  for(var key in courseObject) {
+    courseArr.push(courseObject[key]);
+  }
+  courseArr = JSON.stringify(courseArr);
+
+  res.statusCode = 200;
+  res.end(courseArr);
+};
+
+crud.readOne = function(req, res) {
+  var id = req.params.id;
+  var courseObject = data["courses"];
+
+  var singleObject = JSON.stringify(courseObject[id]);
+  
+  res.statusCode = 200;
+  res.end(singleObject);
+
+};
+
+crud.update = function(req, res) {
+  var id = req.params.id;
+  data["courses"][id] = req.body;
+  save();
+
+  res.statusCode = 200;
+  res.end();
+};
+
+crud.destroy = function(req, res) {
+  var id = req.params.id;
+
+  delete data["courses"][id];
+  save();
+  
+  res.statusCode = 200;
+  res.end();
+};
 
 /** @function load
   * Loads the persistent data file
@@ -77,5 +107,5 @@ function save() {
   */
 module.exports = {
   load: load,
-  handleRequest: handleRequest
+  crud
 }
