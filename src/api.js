@@ -18,6 +18,7 @@ crud.create = function(req, res) {
     var course = req.body;
     var value = course["name"];
     var tokens = value.split(" ");
+    
     if(tokens.length < 2) {
       res.statusCode = 422;
       res.end("Poorly formatted course entry");
@@ -26,10 +27,13 @@ crud.create = function(req, res) {
     var id = tokens[0] + tokens[1];
     data["courses"][id] = course;
     save();
+
     res.statusCode = 200;
     res.end(id);
-  } catch (err) {
+  } 
+  catch (err) {
     console.error(err);
+
     res.statusCode = 500;
     res.end("Server Error: " + err);
   }
@@ -38,7 +42,6 @@ crud.create = function(req, res) {
 /** @function readAll
   * This API function returns a JSON array
   * containing all course entries.
-  * TODO finish error handling
   * @param {http.clientRequest} req - the incoming request
   * @param {http.serverResponse} res - the response to serve
   */
@@ -54,8 +57,10 @@ crud.readAll = function(req, res) {
 
     res.statusCode = 200;
     res.end(courseArr);
-  } catch (err) {
+  } 
+  catch (err) {
     console.error(err);
+
     res.statusCode = 500;
     res.end("Server Error: " + err);
   }
@@ -64,7 +69,6 @@ crud.readAll = function(req, res) {
 /** @function readOne
   * This API function returns a JSON array
   * containing a specified course entry.
-  * TODO finish error handling
   * @param {http.clientRequest} req - the incoming request
   * @param {http.serverResponse} res - the response to serve
   */
@@ -77,8 +81,10 @@ crud.readOne = function(req, res) {
     
     res.statusCode = 200;
     res.end(singleObject); 
-  } catch (err) {
+  } 
+  catch (err) {
     console.error(err);
+
     res.statusCode = 500;
     res.end("Server Error: " + err);
   }
@@ -87,29 +93,29 @@ crud.readOne = function(req, res) {
 /** @function update
   * This API function updates the course JSON object
   * containing the specified course entry.
-  * TODO finish error handling
   * @param {http.clientRequest} req - the incoming request
   * @param {http.serverResponse} res - the response to serve
   */
 crud.update = function(req, res) {
   try {
     var id = req.params.id;
+
     data["courses"][id] = req.body;
     save();
   
     res.statusCode = 200;
     res.end();
-  } catch (err) {
+  } 
+  catch (err) {
     console.error(err);
+
     res.statusCode = 500;
     res.end("Server Error: " + err);
   }
 };
 
 /** @function destroy
-  * This API function returns a JSON array
-  * containing a specified course entry.
-  * TODO finish error handling
+  * This API function removes the specified course entry.
   * @param {http.clientRequest} req - the incoming request
   * @param {http.serverResponse} res - the response to serve
   */
@@ -119,11 +125,13 @@ crud.destroy = function(req, res) {
 
     delete data["courses"][id];
     save();
-    
+
     res.statusCode = 200;
     res.end();
-  } catch (err) {
+  } 
+  catch (err) {
     console.error(err);
+
     res.statusCode = 500;
     res.end("Server Error: " + err);
   }
