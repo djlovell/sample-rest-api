@@ -14,39 +14,26 @@ var crud = {};
   * @param {http.serverResponse} res - the response to serve
   */
 crud.create = function(req, res) {
-  var jsonString = "";
-  
-  req.on('data', function(chunk) {
-    jsonString += chunk;
-  });
-
-  req.on('error', function(err) {
+  try {
+    var course = req.body;
+    var value = course["name"];
+    var tokens = value.split(" ");
+    if(tokens.length < 2) {
+      res.statusCode = 422;
+      res.end("Poorly formatted course entry");
+      return;
+    }
+    var id = tokens[0] + tokens[1];
+    data["courses"][id] = course;
+    save();
+    res.statusCode = 200;
+    res.end(id);
+  } catch (err) {
     console.error(err);
     res.statusCode = 500;
-    res.end("Server Error");
-  });
-
-  req.on('end', function(){
-    try {
-      var course = JSON.parse(jsonString);
-      var tokens = course.name.split(" ");
-      if(tokens.length < 2) {
-        res.statusCode = 422;
-        res.end("Poorly formatted course entry");
-        return;
-      }
-      var id = tokens[0] + tokens[1];
-      data["courses"][id] = course;
-      save();
-      res.statusCode = 200;
-      res.end(id);
-    } catch (err) {
-      console.error(err);
-      res.statusCode = 500;
-      res.end("Server Error: " + err);
-    }
-  });
-};
+    res.end("Server Error: " + err);
+  }
+}
 
 /** @function readAll
   * This API function returns a JSON array
@@ -56,16 +43,22 @@ crud.create = function(req, res) {
   * @param {http.serverResponse} res - the response to serve
   */
 crud.readAll = function(req, res) {
-  var courseArr = [];
-  var courseObject = data["courses"];
+  try {
+    var courseArr = [];
+    var courseObject = data["courses"];
 
-  for(var key in courseObject) {
-    courseArr.push(courseObject[key]);
+    for(var key in courseObject) {
+      courseArr.push(courseObject[key]);
+    }
+    courseArr = JSON.stringify(courseArr);
+
+    res.statusCode = 200;
+    res.end(courseArr);
+  } catch (err) {
+    console.error(err);
+    res.statusCode = 500;
+    res.end("Server Error: " + err);
   }
-  courseArr = JSON.stringify(courseArr);
-
-  res.statusCode = 200;
-  res.end(courseArr);
 };
 
 /** @function readOne
@@ -76,14 +69,19 @@ crud.readAll = function(req, res) {
   * @param {http.serverResponse} res - the response to serve
   */
 crud.readOne = function(req, res) {
-  var id = req.params.id;
-  var courseObject = data["courses"];
+  try {
+    var id = req.params.id;
+    var courseObject = data["courses"];
 
-  var singleObject = JSON.stringify(courseObject[id]);
-  
-  res.statusCode = 200;
-  res.end(singleObject);
-
+    var singleObject = JSON.stringify(courseObject[id]);
+    
+    res.statusCode = 200;
+    res.end(singleObject); 
+  } catch (err) {
+    console.error(err);
+    res.statusCode = 500;
+    res.end("Server Error: " + err);
+  }
 };
 
 /** @function update
@@ -94,12 +92,18 @@ crud.readOne = function(req, res) {
   * @param {http.serverResponse} res - the response to serve
   */
 crud.update = function(req, res) {
-  var id = req.params.id;
-  data["courses"][id] = req.body;
-  save();
-
-  res.statusCode = 200;
-  res.end();
+  try {
+    var id = req.params.id;
+    data["courses"][id] = req.body;
+    save();
+  
+    res.statusCode = 200;
+    res.end();
+  } catch (err) {
+    console.error(err);
+    res.statusCode = 500;
+    res.end("Server Error: " + err);
+  }
 };
 
 /** @function destroy
@@ -110,13 +114,19 @@ crud.update = function(req, res) {
   * @param {http.serverResponse} res - the response to serve
   */
 crud.destroy = function(req, res) {
-  var id = req.params.id;
+  try {
+    var id = req.params.id;
 
-  delete data["courses"][id];
-  save();
-  
-  res.statusCode = 200;
-  res.end();
+    delete data["courses"][id];
+    save();
+    
+    res.statusCode = 200;
+    res.end();
+  } catch (err) {
+    console.error(err);
+    res.statusCode = 500;
+    res.end("Server Error: " + err);
+  }
 };
 
 /** @function load

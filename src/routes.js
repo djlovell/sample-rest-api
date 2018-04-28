@@ -1,6 +1,6 @@
 var routes = require('express').Router();
 
-const apiCalls = require('./api.js');
+const apiCalls = require('./api');
 
 routes.post('/courses', function(req, res) {
     apiCalls.crud.create(req,res);
