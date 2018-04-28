@@ -1,3 +1,12 @@
+/**
+* api.js
+* 
+* RESTful API for interacting with a JSON backend
+*  
+* @author Nathan Bean, Daniel Lovell
+* @version 2.0
+*/
+
 const fs = require('fs');
 
 /* Module variables */

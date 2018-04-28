@@ -1,3 +1,11 @@
+/**
+* routes.js
+* 
+* Express routes mapping http requests to API calls
+*  
+* @author Daniel Lovell
+* @version 1.0
+*/
 var routes = require('express').Router();
 
 const apiCalls = require('./api');

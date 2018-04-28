@@ -1,3 +1,11 @@
+/**
+* server.js
+* 
+* Simple Server for setting up an API.
+*  
+* @author Nathan Bean, Daniel Lovell
+* @version 2.0
+*/
 const http = require('http');
 const api = require('./api');
 const express = require('express');
